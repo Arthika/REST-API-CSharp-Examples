@@ -31,6 +31,11 @@ namespace priceStreaming
     public class getAuthorizationChallengeRequest
     {
         public string user { get; set; }
+
+        public getAuthorizationChallengeRequest(String user)
+        {
+            this.user = user;
+        }
     }
 
     public class getAuthorizationChallengeResponse
@@ -43,6 +48,12 @@ namespace priceStreaming
     {
         public string user { get; set; }
         public string challengeresp { get; set; }
+
+        public getAuthorizationTokenRequest(String user, String challengeresp)
+        {
+            this.user = user;
+            this.challengeresp = challengeresp;
+        }
     }
 
     public class getAuthorizationTokenResponse
@@ -53,10 +64,24 @@ namespace priceStreaming
 
     public class getPriceRequest
     {
-        public string        user { get; set; }
-        public string        token { get; set; }
-        public List<string>  security { get; set; }
-        public List<string>  tinterface { get; set; }
+        public string user { get; set; }
+        public string token { get; set; }
+        public List<string> security { get; set; }
+        public List<string> tinterface { get; set; }
+        public String granularity { get; set; }
+        public int levels { get; set; }
+        public int interval { get; set; }
+
+        public getPriceRequest(String user, String token, List<String> security, List<String> tinterface, String granularity, int levels, int interval)
+        {
+            this.user = user;
+            this.token = token;
+            this.security = security;
+            this.tinterface = tinterface;
+            this.granularity = granularity;
+            this.levels = levels;
+            this.interval = interval;
+        }
     }
 
     public class getPriceResponse
@@ -121,25 +146,6 @@ namespace priceStreaming
                    client.DownloadFile(ssl_cert, "ssl.cert");
                 }
                 certificate1 = new X509Certificate("ssl.cert");
-
-                
-                /*
-                var webRequest = WebRequest.Create(ssl_cert);
-
-                var response2 = webRequest.GetResponse();
-                var content = response2.GetResponseStream();
-                var reader = new StreamReader(content);
-                var strContent = reader.ReadToEnd();
-                X509Certificate2 cert3 = new X509Certificate2(new String(reader));
-
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://mail.google.com");
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                response.Close();
-                X509Certificate cert = request.ServicePoint.Certificate;
-                X509Certificate2 cert2 = new X509Certificate2(cert);
-                //X509Certificate2UI.DisplayCertificate(cert2);
-                 */
-                
             }
 
             // get challenge
@@ -154,8 +160,7 @@ namespace priceStreaming
             using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
                 hftRequest request = new hftRequest();
-                request.getAuthorizationChallenge = new getAuthorizationChallengeRequest();
-                request.getAuthorizationChallenge.user = user;
+                request.getAuthorizationChallenge = new getAuthorizationChallengeRequest(user);
                 streamWriter.WriteLine(serializer.Serialize(request));
             }
             httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
@@ -192,7 +197,7 @@ namespace priceStreaming
             challengeresp = challengeresp.Replace("-", "");
 
             // get token with challenge response
-            httpWebRequest = (HttpWebRequest)WebRequest.Create(domain + ":" + authentication_port + url_token);
+            httpWebRequest = (HttpWebRequest)WebRequest.Create(domain + "2:" + authentication_port + url_token);
             serializer = new JavaScriptSerializer();
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
@@ -203,9 +208,7 @@ namespace priceStreaming
             using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
                 hftRequest request = new hftRequest();
-                request.getAuthorizationToken = new getAuthorizationTokenRequest();
-                request.getAuthorizationToken.user = user;
-                request.getAuthorizationToken.challengeresp = challengeresp;
+                request.getAuthorizationToken = new getAuthorizationTokenRequest(user, challengeresp);
                 streamWriter.WriteLine(serializer.Serialize(request));
             }
             httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
@@ -236,11 +239,7 @@ namespace priceStreaming
             {
                 hftRequest request = new hftRequest();
 
-                request.getPrice            = new getPriceRequest();
-                request.getPrice.user       = user;
-                request.getPrice.token      = token;
-                request.getPrice.security   = new List<string> { "EUR_USD", "GBP_USD" };
-                request.getPrice.tinterface = new List<string> { "TI1" };
+                request.getPrice = new getPriceRequest(user, token, new List<string> { "EUR_USD", "GBP_USD" }, null, "tob", 1, interval);
                 streamWriter.WriteLine(serializer.Serialize(request));
             }
 
@@ -286,10 +285,9 @@ namespace priceStreaming
         {
             try
             {
-                Console.WriteLine("GETTING");
                 foreach (var row in File.ReadAllLines("config.properties"))
                 {
-                    Console.WriteLine(row);
+                    //Console.WriteLine(row);
                     if ("url-stream".Equals(row.Split('=')[0]))
                     {
                         url_stream = row.Split('=')[1];
