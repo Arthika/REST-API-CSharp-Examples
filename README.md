@@ -44,10 +44,10 @@ In case you want to disable ssl protocol, change the following line:
 private static bool ssl = true;
 ```
 
-**4. Generate executable file:**
+**4. Generate executable file.**
 
 
-**5. Run the executable file.**
+**5. Run executable file.**
 ```javascript
 $ REST-API-CSharp-Examples
 
