@@ -1,4 +1,4 @@
-### REST-API-CSharp-Examples
+# REST-API-CSharp-Examples
 This is Arthika's repository for examples, sample code written in CSharp that demonstrates in a simple way how to use our REST API.
 
 * getAccount
