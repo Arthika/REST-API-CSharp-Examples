@@ -1,18 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.IO;
-using System.Web.Script.Serialization;
-using System.Security;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Web.Script.Serialization;
 
 // Note: To enable JSON (JavaScriptSerializer) add following reference: System.Web.Extensions
 
-namespace priceStreaming
+namespace PriceStreaming
 {
     public class hftRequest
     {
@@ -86,49 +83,49 @@ namespace priceStreaming
 
     public class getPriceResponse
     {
-        public int              result { get; set; }
-        public string           message { get; set; }
-        public List<priceTick>  tick { get; set; }
-        public priceHeartbeat   heartbeat { get; set; }
-        public string           timestamp { get; set; }
+        public int result { get; set; }
+        public string message { get; set; }
+        public List<priceTick> tick { get; set; }
+        public priceHeartbeat heartbeat { get; set; }
+        public string timestamp { get; set; }
     }
 
     public class priceTick
     {
-        public string  security { get; set; }
-        public string  tinterface { get; set; }
-        public double  price { get; set; }
-        public int     pips { get; set; }
-        public int     liquidity { get; set; }
-        public string  side { get; set; }
+        public string security { get; set; }
+        public string tinterface { get; set; }
+        public double price { get; set; }
+        public int pips { get; set; }
+        public int liquidity { get; set; }
+        public string side { get; set; }
     }
 
     public class priceHeartbeat
     {
-        public List<string>  security { get; set; }
-        public List<string>  tinterface { get; set; }
+        public List<string> security { get; set; }
+        public List<string> tinterface { get; set; }
     }
 
-    class Program
+    class PriceStreaming
     {
 
-    private static bool ssl = true;
-	private static String URL = "/getPrice";
-	private static String domain;
-	private static String url_stream;
-	private static String url_polling;
-	private static String url_challenge;
-	private static String url_token;
-	private static String user;
-	private static String password;
-	private static String authentication_port;
-	private static String request_port;
-	private static String ssl_cert;
-	private static String challenge;
-	private static String token;
-	private static int interval;
+        private static bool ssl = true;
+        private static String URL = "/getPrice";
+        private static String domain;
+        private static String url_stream;
+        //private static String url_polling;
+        private static String url_challenge;
+        private static String url_token;
+        private static String user;
+        private static String password;
+        private static String authentication_port;
+        private static String request_port;
+        private static String ssl_cert;
+        private static String challenge;
+        private static String token;
+        private static int interval;
 
-        static void Main(string[] args)
+        public static void Exec()
         {
 
             // get properties from file
@@ -143,7 +140,7 @@ namespace priceStreaming
             {
                 using (WebClient client = new WebClient())
                 {
-                   client.DownloadFile(ssl_cert, "ssl.cert");
+                    client.DownloadFile(ssl_cert, "ssl.cert");
                 }
                 certificate1 = new X509Certificate("ssl.cert");
             }
@@ -197,7 +194,7 @@ namespace priceStreaming
             challengeresp = challengeresp.Replace("-", "");
 
             // get token with challenge response
-            httpWebRequest = (HttpWebRequest)WebRequest.Create(domain + "2:" + authentication_port + url_token);
+            httpWebRequest = (HttpWebRequest)WebRequest.Create(domain + ":" + authentication_port + url_token);
             serializer = new JavaScriptSerializer();
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
@@ -225,8 +222,8 @@ namespace priceStreaming
             }
 
             // -----------------------------------------
-	        // Prepare and send a price request
-	        // -----------------------------------------
+            // Prepare and send a price request
+            // -----------------------------------------
             httpWebRequest = (HttpWebRequest)WebRequest.Create(domain + ":" + request_port + url_stream + URL);
             serializer = new JavaScriptSerializer();
             httpWebRequest.ContentType = "application/json";
@@ -250,38 +247,42 @@ namespace priceStreaming
             using (StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 hftResponse response;
+                String line;
                 try
                 {
-                    while (true)
+                    while ((line = streamReader.ReadLine()) != null)
                     {
-                        response = serializer.Deserialize<hftResponse>(streamReader.ReadLine());
-                        if (response.getPriceResponse.timestamp != null)
+                        response = serializer.Deserialize<hftResponse>(line);
+                        if (response.getPriceResponse != null)
                         {
-                            Console.WriteLine("Response timestamp: " + response.getPriceResponse.timestamp + " Contents:");
-                        }
-                        if (response.getPriceResponse.tick != null)
-                        {
-                            foreach (priceTick tick in response.getPriceResponse.tick)
+                            if (response.getPriceResponse.timestamp != null)
                             {
-                                Console.WriteLine("Security: " + tick.security + " Price: " + tick.price + " tinterface: " + tick.tinterface + " Side: " + tick.side + " Liquidity: " + tick.liquidity);
+                                Console.WriteLine("Response timestamp: " + response.getPriceResponse.timestamp + " Contents:");
                             }
-                        }
-                        if (response.getPriceResponse.heartbeat != null)
-                        {
-                            Console.WriteLine("Heartbeat!");
-                        }
-                        if (response.getPriceResponse.message != null)
-                        {
-                            Console.WriteLine("Message from server: " + response.getPriceResponse.message);
+                            if (response.getPriceResponse.tick != null)
+                            {
+                                foreach (priceTick tick in response.getPriceResponse.tick)
+                                {
+                                    Console.WriteLine("Security: " + tick.security + " Price: " + tick.price + " tinterface: " + tick.tinterface + " Side: " + tick.side + " Liquidity: " + tick.liquidity);
+                                }
+                            }
+                            if (response.getPriceResponse.heartbeat != null)
+                            {
+                                Console.WriteLine("Heartbeat!");
+                            }
+                            if (response.getPriceResponse.message != null)
+                            {
+                                Console.WriteLine("Message from server: " + response.getPriceResponse.message);
+                            }
                         }
                     }
                 }
                 catch (SocketException ex) { Console.WriteLine(ex.Message); }
-                catch (IOException ioex) { Console.WriteLine(ioex.Message);}
+                catch (IOException ioex) { Console.WriteLine(ioex.Message); }
             }
         }
 
-        public static void getProperties()
+        private static void getProperties()
         {
             try
             {

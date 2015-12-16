@@ -8,8 +8,8 @@
     <ProjectGuid>{3290AE33-FE03-4EEB-A89D-CB81D9DDD6E5}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>priceStreaming</RootNamespace>
-    <AssemblyName>priceStreaming</AssemblyName>
+    <RootNamespace>Main</RootNamespace>
+    <AssemblyName>REST-API-CSharp-Examples</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
@@ -47,7 +47,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\priceStreaming.cs" />
+    <Compile Include="src\CancelOrder.cs" />
+    <Compile Include="src\ModifyOrder.cs" />
+    <Compile Include="src\SetOrder.cs" />
+    <Compile Include="src\GetHistoricalPrices.cs" />
+    <Compile Include="src\GetInterface.cs" />
+    <Compile Include="src\GetAccount.cs" />
+    <Compile Include="src\OrderPolling.cs" />
+    <Compile Include="src\PositionPolling.cs" />
+    <Compile Include="src\PricePolling.cs" />
+    <Compile Include="src\OrderStreaming.cs" />
+    <Compile Include="src\PositionStreaming.cs" />
+    <Compile Include="src\Main.cs" />
+    <Compile Include="src\PriceStreaming.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
