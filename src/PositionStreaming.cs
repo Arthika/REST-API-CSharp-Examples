@@ -258,7 +258,7 @@ namespace PositionStreaming
             {
                 hftRequest request = new hftRequest();
 
-                request.getPosition = new getPositionRequest(user, token, null, new List<string> { "EUR_USD", "GBP_USD" }, null, interval);
+                request.getPosition = new getPositionRequest(user, token, null, new List<string> { "EUR/USD", "GBP/USD" }, null, interval);
                 streamWriter.WriteLine(serializer.Serialize(request));
             }
 

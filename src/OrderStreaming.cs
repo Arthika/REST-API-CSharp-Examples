@@ -252,7 +252,7 @@ namespace OrderStreaming
             {
                 hftRequest request = new hftRequest();
 
-                request.getOrder = new getOrderRequest(user, token, new List<string> { "EUR_USD", "GBP_JPY", "GBP_USD" }, null, null, interval);
+                request.getOrder = new getOrderRequest(user, token, new List<string> { "EUR/USD", "GBP/JPY", "GBP/USD" }, null, null, interval);
                 streamWriter.WriteLine(serializer.Serialize(request));
             }
 

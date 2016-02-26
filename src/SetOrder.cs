@@ -215,14 +215,14 @@ namespace SetOrder
             // Prepare and send a setOrder request with two orders
             // -----------------------------------------
             orderRequest order1 = new orderRequest();
-            order1.security = "EUR_USD";
+            order1.security = "EUR/USD";
             order1.tinterface = "TI1";
             order1.quantity = 500000;
             order1.side = "sell";
             order1.type = "market";
 
             orderRequest order2 = new orderRequest();
-            order2.security = "GBP_USD";
+            order2.security = "GBP/USD";
             order2.tinterface = "TI1";
             order2.quantity = 600000;
             order2.side = "sell";

@@ -232,7 +232,7 @@ namespace GetHistoricalPrice
             {
                 hftRequest request = new hftRequest();
 
-                request.getHistoricalPrice = new getHistoricalPriceRequest(user, token, new List<string> { "EUR_USD", "GBP_USD" }, null, "s1", "ask", 3);
+                request.getHistoricalPrice = new getHistoricalPriceRequest(user, token, new List<string> { "EUR/USD", "GBP/USD" }, null, "s1", "ask", 3);
                 streamWriter.WriteLine(serializer.Serialize(request));
             }
 

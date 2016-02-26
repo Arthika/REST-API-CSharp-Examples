@@ -256,7 +256,7 @@ namespace PositionPolling
             {
                 hftRequest request = new hftRequest();
 
-                request.getPosition = new getPositionRequest(user, token, null, new List<string> { "EUR_USD", "GBP_USD" }, null);
+                request.getPosition = new getPositionRequest(user, token, null, new List<string> { "EUR/USD", "GBP/USD" }, null);
                 streamWriter.WriteLine(serializer.Serialize(request));
             }
 

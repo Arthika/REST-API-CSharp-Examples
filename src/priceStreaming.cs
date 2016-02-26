@@ -236,7 +236,7 @@ namespace PriceStreaming
             {
                 hftRequest request = new hftRequest();
 
-                request.getPrice = new getPriceRequest(user, token, new List<string> { "EUR_USD", "GBP_USD" }, null, "tob", 1, interval);
+                request.getPrice = new getPriceRequest(user, token, new List<string> { "EUR/USD", "GBP/USD" }, null, "tob", 1, interval);
                 streamWriter.WriteLine(serializer.Serialize(request));
             }
 

@@ -36,7 +36,7 @@ password=demo
 
 From here on we will assume it is priceStreaming.java.
 ```
-request.getPrice = new getPriceRequest(user, token, new List<string> { "EUR_USD", "GBP_USD" }, null, "tob", 1, interval);
+request.getPrice = new getPriceRequest(user, token, new List<string> { "EUR/USD", "GBP/USD" }, null, "tob", 1, interval);
 ```
 
 In case you want to disable ssl protocol, change the following line:
@@ -73,13 +73,13 @@ or
 $ REST-API-CSharp-Examples 1
 
 Response timestamp: 1441712414.982956 Contents:
-Security: EUR_USD Price: 1.11618 Side: ask Liquidity: 1000000
-Security: EUR_USD Price: 1.11613 Side: bid Liquidity: 1000000
+Security: EUR/USD Price: 1.11618 Side: ask Liquidity: 1000000
+Security: EUR/USD Price: 1.11613 Side: bid Liquidity: 1000000
 Response timestamp: 1441712415.983567 Contents:
 Heartbeat!
 Response timestamp: 1441712416.194543 Contents:
-Security: EUR_USD Price: 1.11618 Side: ask Liquidity: 1000000
-Security: EUR_USD Price: 1.11614 Side: bid Liquidity: 500000
+Security: EUR/USD Price: 1.11618 Side: ask Liquidity: 1000000
+Security: EUR/USD Price: 1.11614 Side: bid Liquidity: 500000
 ```
 
 

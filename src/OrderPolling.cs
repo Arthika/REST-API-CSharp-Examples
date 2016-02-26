@@ -250,7 +250,7 @@ namespace OrderPolling
             {
                 hftRequest request = new hftRequest();
 
-                request.getOrder = new getOrderRequest(user, token, new List<string> { "EUR_USD", "GBP_JPY", "GBP_USD" }, null, null);
+                request.getOrder = new getOrderRequest(user, token, new List<string> { "EUR/USD", "GBP/JPY", "GBP/USD" }, null, null);
                 streamWriter.WriteLine(serializer.Serialize(request));
             }
 
